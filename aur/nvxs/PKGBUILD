@@ -1,0 +1,45 @@
+# Maintainer: Anatol Pomozov <anatol.pomozov@gmail.com>
+
+pkgname=nvxs
+pkgver=1.0.2
+pkgrel=1
+pkgdesc='Anime face detect library'
+arch=(i686 x86_64)
+url='http://anime.udp.jp/imager-animeface.html'
+license=()
+depends=()
+source=(http://www.udp.jp/software/nvxs-1.0.2.tar.gz)
+sha256sums=('476623ef8ba3202eb3691728d93c1c12307c1ea08834d67d9397be3e1b60095a')
+
+prepare() {
+  cd nvxs-$pkgver
+}
+
+build() {
+  cd nvxs-$pkgver
+  ./configure  --prefix=/usr
+  ulim=`ulimit -s`
+  ulimit -s unlimited
+  make
+  ulimit -s $ulim
+}
+
+check() {
+  cd nvxs-$pkgver
+
+  # unset LDFLAGS as testsuite makes assumptions about which ones are active
+  # do not abort on errors - manually check log files
+  #make LDFLAGS="" -k check
+}
+
+package() {
+  cd nvxs-$pkgver
+
+  make DESTDIR="$pkgdir" install
+
+  # Remove file conflicting with host binutils and manpages for MS Windows tools
+  #rm "$pkgdir"/usr/share/man/man1/$_target-{dlltool,nlmconv,windres,windmc}*
+
+  # Remove info documents that conflict with host version
+  rm -rf "$pkgdir"/usr/share/info
+}

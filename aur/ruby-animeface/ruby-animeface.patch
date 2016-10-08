@@ -1,0 +1,21 @@
+diff --git a/animeface.c b/animeface.c
+index 60a7411..05de089 100644
+--- a/animeface.c
++++ b/animeface.c
+@@ -20,13 +20,14 @@ static void
+ nv_conv_imager2nv(nv_matrix_t *bgr, nv_matrix_t *gray,
+ 				  VALUE im)
+ {
+-	int y, x,  xsize, ysize, depth;
++	int y, x,  xsize, ysize, range, depth;
+ 	VALUE c;
+ 	ID rb_id_green, rb_id_blue, rb_id_red, rb_id_pixel_color;
+ 	
+ 	xsize = NUM2INT(rb_funcall(im, rb_intern("columns"), 0));
+ 	ysize = NUM2INT(rb_funcall(im, rb_intern("rows"), 0));
+-	depth = NUM2INT(rb_const_get(cMagick, rb_intern("QuantumDepth")));
++	range = NUM2INT(rb_const_get(cMagick, rb_intern("QuantumRange")));
++	depth = log10((range + 1)) / log10(2.0);
+ 
+ 	assert(bgr->rows == gray->rows && bgr->rows == ysize);
+ 	assert(bgr->cols == gray->cols && bgr->cols == xsize);

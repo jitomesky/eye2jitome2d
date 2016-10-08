@@ -1,0 +1,14 @@
+pkgbase = nvxs
+	pkgdesc = Anime face detect library
+	pkgver = 1.0.2
+	pkgrel = 1
+	url = http://anime.udp.jp/imager-animeface.html
+	arch = i686
+	arch = x86_64
+	license = 
+	depends = 
+	source = http://www.udp.jp/software/nvxs-1.0.2.tar.gz
+	sha256sums = 476623ef8ba3202eb3691728d93c1c12307c1ea08834d67d9397be3e1b60095a
+
+pkgname = nvxs
+

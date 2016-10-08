@@ -1,0 +1,45 @@
+# Maintainer: Anatol Pomozov <anatol.pomozov@gmail.com>
+
+pkgname=animeface-ruby
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='Anime face detect library for Ruby'
+arch=(i686 x86_64)
+url='http://ultraist.hatenablog.com/entry/20100730/1280498051'
+license=(NYSL)
+depends=(ruby nvxs ruby-rmagick)
+source=(http://www.udp.jp/software/AnimeFace-Ruby.tar.gz
+                ruby-animeface.patch)
+sha256sums=('3d030f85d4861f59657da31754190350473cff58286570baf9c8e84f309e5c0d'
+                            'SKIP')
+
+prepare() {
+  cd AnimeFace-Ruby
+  patch -p1 -i "$srcdir/ruby-animeface.patch"
+}
+
+build() {
+  cd AnimeFace-Ruby
+  ruby extconf.rb
+  make
+}
+
+check() {
+  cd AnimeFace-Ruby
+
+  # unset LDFLAGS as testsuite makes assumptions about which ones are active
+  # do not abort on errors - manually check log files
+  #make LDFLAGS="" -k check
+}
+
+package() {
+  cd AnimeFace-Ruby
+
+  make DESTDIR="$pkgdir" install
+
+  # Remove file conflicting with host binutils and manpages for MS Windows tools
+  #rm "$pkgdir"/usr/share/man/man1/$_target-{dlltool,nlmconv,windres,windmc}*
+
+  # Remove info documents that conflict with host version
+  rm -rf "$pkgdir"/usr/share/info
+}
